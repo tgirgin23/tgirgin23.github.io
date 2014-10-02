@@ -1,0 +1,22 @@
+body 
+{
+	padding-top: 50px;
+	padding-bottom: 20px;
+}
+
+#map, #settings
+{ 
+	height: 400px;
+	margin-bottom: 10px;
+}
+
+#map_container
+{
+	margin-top: 50px;
+}
+
+#settings
+{
+	background-color: #eee;
+	width: auto;
+}

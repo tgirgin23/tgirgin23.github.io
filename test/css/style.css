@@ -534,7 +534,7 @@
 		position: fixed;
 		top: 0;
 		left: 0;
-		width: 375px;
+		width: 275px;
 		height: 100%;
 		color: #fff;
 		background: #222629 url('images/overlay.png');
@@ -716,7 +716,7 @@
 
 	#main
 	{
-		margin-left: 375px;
+		margin-left: 250px;
 	}
 	
 		#main > section

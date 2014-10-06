@@ -25,3 +25,9 @@
 		#header nav li {
 			opacity: 1;
 		}
+
+/* Footer */
+
+	#footer {
+		background-image: url("images/footer.svg");
+	}

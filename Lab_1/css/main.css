@@ -6,7 +6,7 @@ body
 
 #map, #settings
 { 
-	height: 400px;
+	height: 600px;
 	margin-bottom: 10px;
 }
 
@@ -19,4 +19,34 @@ body
 {
 	background-color: #eee;
 	width: auto;
+}
+
+/* -------------------------------- */
+
+.legend, .temporal-legend {
+	padding: 6px 10px;
+	font: 14px/16px Arial, Helvetica, sans-serif;
+	background: white;
+	background: rgba(255,255,255,0.8);
+	box-shadow: 0 0 15px rgba(0,0,0,0.2);
+	border-radius: 5px;
+}
+#legendTitle {
+	text-align: center;
+	margin-bottom: 15px;
+	font-variant: small-caps;
+}
+.symbolsContainer {
+	float: left;
+	margin-left: 50px;
+}
+.legendCircle {
+	border-radius:50%;
+	border: 1px solid #8A0707;
+	background: rgba(138, 7, 7, .6);
+	display: inline-block;
+}
+.legendValue {
+	position: absolute;
+	right: 8px;
 }

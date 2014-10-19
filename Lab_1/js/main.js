@@ -1,23 +1,27 @@
 window.onload = function () 
 {
 	var map, cities, tiles;
+	var array = [];
 
 	map = L.map('map', 
 	{
-    	center: [56, 25.316667],
-    	zoom: 3
+    	center: [50, 22.316667],
+    	zoom: 4
 	});
 
-	tiles = L.tileLayer('http://{s}.tiles.mapbox.com/v3/tgirgin.jinodeg7/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoidGdpcmdpbiIsImEiOiIxV0ExandNIn0.T0lIyQKqIktV__nqnLSxCQ', 
+	tiles = L.tileLayer('http://{s}.tiles.mapbox.com/v3/examples.map-y7l23tes/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoidGdpcmdpbiIsImEiOiIxV0ExandNIn0.T0lIyQKqIktV__nqnLSxCQ', 
     {
     	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-    	maxZoom: 18
+    	maxZoom: 7
 	}).addTo(map);
+
 
 	$.getJSON("data/map.geojson").done(function(data)
 	{
 		var info = processData(data);
 		createPropSymbols(info.timestamps, data);
+		createLegend(info.min,info.max);
+		createSliderUI(info.timestamps);
 		console.log("Loaded the data successfully!");
 	}).fail(function()
 	{
@@ -38,24 +42,29 @@ window.onload = function ()
 			{
 				if (attribute != 'id' && attribute != 'name' && attribute != 'lat' && attribute != 'lon')
 				{
+					// Slicing off the last character (')')
+					// Spliting the first and second value into 2 different values in the array
+					// array[0] returns the total number of homicides
+					// array[1] returns homicide/100.000
+					properties[attribute] = String(properties[attribute]).slice(0, -1).split('(');
+					array = properties[attribute.split(',')];
 					if ($.inArray(attribute, timestamps) === -1)
 					{
 						timestamps.push(attribute);
 					}
 
-					if (properties[attribute] < min)
+					if (Number(array[1]) < min)
 					{
-						min = properties[attribute];
+						min = Number(array[1]);
 					}
 
-					if (properties[attribute] > max)
+					if (Number(array[1]) > max)
 					{
-						max = properties[attribute];
+						max = Number(array[1]);
 					}
 				}
 			}
 		}
-		console.log(timestamps);
 		return(
 		{
 			timestamps: timestamps,
@@ -103,25 +112,107 @@ window.onload = function ()
 		{
 			var props = layer.feature.properties;
 			var radius = calcPropRadius(props[timestamps]);
-			var popupContent = "<b>" + String(props[timestamps]) + 
-								" units</b><br>" + "<i>" + 
+			var popupContent = "<b>" + String(props[timestamps][1]) + 
+								" homicides</b><br>" + "<i>" + 
 								props.name + "</i> in </i>" + 
 								timestamps + "</i>";
 			layer.setRadius(radius);
-			layer.bindPopup(popupContent, { offset: new L.Point(0, radius) });
+			layer.bindPopup(popupContent, { offset: new L.Point(0, -radius + 5) });
 		});
 	}
 	function calcPropRadius(attributeValue)
 	{
-		// Slicing off the last character (')')
-		// Spliting the first and second value into 2 different values in the array
-		attributeValue = attributeValue.slice(0, -1).split('('[0]);
-		console.log(attributeValue[0]);
-		// attributeValue[0] returns the total number of homicides
-		// attributeValue[1] returns homicide/100.000
+			var scaleFactor = 35;
+			var area = Number(attributeValue[1]) * scaleFactor;
+			return Math.sqrt(area/Math.PI)*2;
+		
+	}
 
-		var scaleFactor = 20;
-		var area = attributeValue[1] * scaleFactor;
-		return Math.sqrt(area/Math.PI)*2;
+	function createLegend(min, max)
+	{
+		if(min < 1)
+		{
+			min = 1;
+		}
+		function roundNumber(inNumber)
+		{
+			return (Math.round(inNumber));
+		}	
+		var legend = L.control({position: 'bottomright'});
+		legend.onAdd = function(map)
+		{
+			var legendContainer = L.DomUtil.create("div", "legend");
+			var symbolsContainer = L.DomUtil.create("div", "symbolsContainer");
+			var classes = [roundNumber(min), roundNumber((max-min)/2), roundNumber(max)];
+			var legendCircle;
+			var lastRadius = 0;
+			var currentRadius;
+			var margin;
+
+			L.DomEvent.addListener(legendContainer, 'mousedown', function(e) 
+			{
+				L.DomEvent.stopPropagation(e);
+			});
+
+			$(legendContainer).append("<h2 id='legendTitle'>Number of </br>homicides</h2>");
+
+			for (var i = 0; i <= classes.length-1; i++)
+			{
+				legendCircle = L.DomUtil.create("div", "legendCircle");
+				currentRadius = calcPropRadius([0,classes[i]]);
+				margin = -currentRadius - lastRadius;
+
+				$(legendCircle).attr("style", "width: " + currentRadius * 2 +
+					"px; height: " + currentRadius * 2 +
+					"px; margin-left: " + margin + "px");
+
+				$(legendCircle).append("<span class = 'legendValue'>" + classes[i] + "<span>");
+
+				$(symbolsContainer).append(legendCircle);
+				lastRadius = currentRadius;
+			}
+
+			$(legendContainer).append(symbolsContainer);
+			return legendContainer;
+		};
+		legend.addTo(map);
+	}
+	function createSliderUI(timestamps) 
+	{
+		var sliderControl = L.control({ position: 'bottomleft'} );
+		sliderControl.onAdd = function(map) 
+		{
+			var slider = L.DomUtil.create("input", "range-slider");
+			L.DomEvent.addListener(slider, 'mousedown', function(e) 
+			{ 
+				L.DomEvent.stopPropagation(e); 
+			});
+
+			$(slider)
+				.attr({'type':'range',
+					   'max': timestamps[timestamps.length-1],
+					   'min':timestamps[0],
+					   'step': 1,
+					   'value': String(timestamps[0])
+				}).on('input', function() {
+		        	updatePropSymbols($(this).val().toString());
+		        	$(".temporal-legend").text(this.value);
+		        });
+			return slider;
+		}
+		sliderControl.addTo(map);
+		createTemporalLegend(timestamps[0]);
+	}
+
+	function createTemporalLegend(startTimestamp)
+	{
+		var temporalLegend = L.control({ position: 'bottomleft'});
+
+		temporalLegend.onAdd = function(map) 
+		{
+			var output = L.DomUtil.create("output", "temporal-legend");
+			return output;
+		}
+		temporalLegend.addTo(map);
 	}
 }

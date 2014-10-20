@@ -77,9 +77,9 @@
 			options: {
 				position: 'topleft',
 				// Height of zoom-slider.png in px
-				stepHeight: 15,
+				stepHeight: 8,
 				// Height of the knob div in px (including border)
-				knobHeight: 8,
+				knobHeight: 6,
 				styleNS: 'leaflet-control-zoomslider'
 			},
 

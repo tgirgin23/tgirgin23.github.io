@@ -5,7 +5,7 @@ window.onload = function ()
 
 	map = L.map('map', 
 	{
-    	center: [50, 22.316667],
+    	center: [50, 13.316667],
     	zoom: 4,
     	zoomsliderControl: true,
         zoomControl: false
@@ -46,8 +46,6 @@ window.onload = function ()
 	{
 		alert("There has been a problem loading the data");
 	})
-
-			
 
 	function processData(data)
 	{
@@ -129,6 +127,9 @@ window.onload = function ()
 		// This permits the whole script to work, otherwise 
 		// Bugs are resulting from using the same layer!
 		cities2 = jQuery.extend(true, {}, cities);
+		// Will resize to make sure that most screens
+		// will see the cities
+		map.fitBounds(cities.getBounds());
 		updatePropSymbols(timestamps[0]);
 	}
 
@@ -139,7 +140,7 @@ window.onload = function ()
 			var props = layer.feature.properties;
 			var radius = calcPropRadius(props[timestamps]);
 			var popupContent = "<b>" + String(props[timestamps][1]) + 
-								" homicide rate</b><br>" + "<i>" + 
+								" homicide/100,000</b><br>" + "<i>" + 
 								props.name + "</i> in </i>" + 
 								timestamps + "</i>";
 			layer.setRadius(radius);
@@ -180,7 +181,7 @@ window.onload = function ()
 				L.DomEvent.stopPropagation(e);
 			});
 
-			$(legendContainer).append("<h3 id='legendTitle'>Homicide</br> rates</h2>" + 
+			$(legendContainer).append("<h3 id='legendTitle'><b>Homicides</b></h3>" + 
 										"\n <h5 id='legendTitle'>Per 100,000</h5>");
 
 			for (var i = 0; i <= classes.length-1; i++)
@@ -222,7 +223,7 @@ window.onload = function ()
 	function createSliderUI(timestamps) 
 	{
 		console.log(timestamps);
-		var sliderControl = L.control({ position: 'bottomleft'} );
+		var sliderControl = L.control({ position: 'topright'} );
 		sliderControl.onAdd = function(map) 
 		{
 			var slider = L.DomUtil.create("input", "range-slider");
@@ -249,11 +250,11 @@ window.onload = function ()
 
 	function createTemporalLegend(startTimestamp)
 	{
-		var temporalLegend = L.control({ position: 'bottomleft'});
+		var temporalLegend = L.control({ position: 'topright'});
 
 		temporalLegend.onAdd = function(map) 
 		{
-			var output = L.DomUtil.create("div", "temporal-legend");
+			var output = L.DomUtil.create("span", "temporal-legend");
 			return output;
 		}
 		temporalLegend.addTo(map);

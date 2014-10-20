@@ -1,6 +1,6 @@
 body 
 {
-	padding-top: 50px;
+
 	padding-bottom: 20px;
 }
 
@@ -21,6 +21,23 @@ body
 	width: auto;
 }
 
+#Note
+{
+	text-align: center;
+	background: none repeat scroll 0 0 #fbf5bf;
+    border: 1px solid #c6bb58;
+    box-shadow: 2px 2px 6px #999;
+    color: #666;
+    height: 4em;
+    padding: .5em;
+    width: 100%;
+}
+
+#Copyright
+{
+	text-align: center;
+}
+
 /* -------------------------------- */
 
 .legend, .temporal-legend {
@@ -33,7 +50,8 @@ body
 }
 #legendTitle {
 	text-align: center;
-	margin-bottom: 15px;
+	margin-bottom: 7px;
+	margin-top: 0px;
 	font-variant: small-caps;
 }
 .symbolsContainer {
@@ -49,4 +67,9 @@ body
 .legendValue {
 	position: absolute;
 	right: 8px;
+}
+
+.leaflet-control-scale-line
+{
+	background: rgba(255, 255, 255, 0.5);
 }

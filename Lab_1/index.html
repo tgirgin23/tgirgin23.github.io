@@ -16,12 +16,15 @@
         <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
         <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
         <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+        <link rel="stylesheet" href="plugins/zoomslider/src/L.Control.Zoomslider.css" />
+        <link rel="stylesheet" href="plugins/search/src/leaflet-search.css" />
+        <link rel="stylesheet" href="plugins/fusesearch/src/leaflet.fusesearch.css" />
     </head>
     <body>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<!--     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -30,15 +33,16 @@
           <a class="navbar-brand" href="index.html">Homicides in major European Cities</a>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="container" id="map_container">
       <div class="row clearfix">
+            <p id="Note"> The use of Firefox or Chrome with a screen size of a minimum of 12 inches is recommend for optimal use. </br> <b>Note</b>: Some cities' data might not be available or no homicide were recorded during that year.</p>
           <div id="map"></div>
     </div>
 </div>
     <div>
       <footer>
-        <p>&copy; Timur Girgin 2014</p>
+        <p id="Copyright">&copy; Timur Girgin 2014</p>
       </footer>
     </div>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -46,5 +50,12 @@
         <script src="js/vendor/bootstrap.min.js"></script>
         <script src="js/main.js"></script>
         <script src="js/countries.js" type="text/javascript"></script>
+        <script src="plugins/zoomslider/src/L.Control.Zoomslider.js"></script>
+        <script src="plugins/control/Scale.js"></script>
+        <script src="plugins/search/src/leaflet-search.js"></script>
+        <script src="plugins/fuse.js"></script>
+        <script src="plugins/fusesearch/src/leaflet.fusesearch.js"></script>
+
+
     </body>
 </html>

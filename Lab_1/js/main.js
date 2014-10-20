@@ -1,19 +1,36 @@
 window.onload = function () 
 {
-	var map, cities, tiles;
+	var map, cities, tiles, searchControl, citySearch, cities2;
 	var array = [];
 
 	map = L.map('map', 
 	{
     	center: [50, 22.316667],
-    	zoom: 4
+    	zoom: 4,
+    	zoomsliderControl: true,
+        zoomControl: false
 	});
 
 	tiles = L.tileLayer('http://{s}.tiles.mapbox.com/v3/examples.map-y7l23tes/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoidGdpcmdpbiIsImEiOiIxV0ExandNIn0.T0lIyQKqIktV__nqnLSxCQ', 
     {
     	attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
-    	maxZoom: 7
+    	maxZoom: 7,
+    	minZoom: 3
 	}).addTo(map);
+
+	//L.control.scale({maxWidth : '200',metric: 'true'}).addTo(map);
+	map.addControl(new L.Control.Scale());
+
+	var markersLayer = new L.LayerGroup();	//layer contain searched elements
+	map.addLayer(markersLayer);
+
+	// Keeps window focused on main point
+	// $(window).on('orientationchange pageshow resize', function () {
+ //    $("#map").height($(window).height());
+ //    map.invalidateSize();
+ //    map.setView([50, 22.316667], 4);
+    
+	// }).trigger('resize');
 
 
 	$.getJSON("data/map.geojson").done(function(data)
@@ -21,12 +38,16 @@ window.onload = function ()
 		var info = processData(data);
 		createPropSymbols(info.timestamps, data);
 		createLegend(info.min,info.max);
+		searchControl = createSearchUI(data);
 		createSliderUI(info.timestamps);
+		map.addControl(searchControl);
 		console.log("Loaded the data successfully!");
 	}).fail(function()
 	{
 		alert("There has been a problem loading the data");
 	})
+
+			
 
 	function processData(data)
 	{
@@ -63,6 +84,7 @@ window.onload = function ()
 						max = Number(array[1]);
 					}
 				}
+
 			}
 		}
 		return(
@@ -97,12 +119,16 @@ window.onload = function ()
 							this.closePopup();
 							this.setStyle(
 							{
-								color: "#537898"
+								color: "#8A0707"
 							});
 						}
 					});
 			}
 		}).addTo(map);
+		// Copying the object cities to a new object
+		// This permits the whole script to work, otherwise 
+		// Bugs are resulting from using the same layer!
+		cities2 = jQuery.extend(true, {}, cities);
 		updatePropSymbols(timestamps[0]);
 	}
 
@@ -113,18 +139,18 @@ window.onload = function ()
 			var props = layer.feature.properties;
 			var radius = calcPropRadius(props[timestamps]);
 			var popupContent = "<b>" + String(props[timestamps][1]) + 
-								" homicides</b><br>" + "<i>" + 
+								" homicide rate</b><br>" + "<i>" + 
 								props.name + "</i> in </i>" + 
 								timestamps + "</i>";
 			layer.setRadius(radius);
-			layer.bindPopup(popupContent, { offset: new L.Point(0, -radius + 5) });
+			layer.bindPopup(popupContent, { offset: new L.Point(0, -radius + 4) });
 		});
 	}
 	function calcPropRadius(attributeValue)
 	{
-			var scaleFactor = 35;
-			var area = Number(attributeValue[1]) * scaleFactor;
-			return Math.sqrt(area/Math.PI)*2;
+		var scaleFactor = 50;
+		var area = Number(attributeValue[1]) * scaleFactor;
+		return Math.sqrt(area/Math.PI)*2;
 		
 	}
 
@@ -154,7 +180,8 @@ window.onload = function ()
 				L.DomEvent.stopPropagation(e);
 			});
 
-			$(legendContainer).append("<h2 id='legendTitle'>Number of </br>homicides</h2>");
+			$(legendContainer).append("<h3 id='legendTitle'>Homicide</br> rates</h2>" + 
+										"\n <h5 id='legendTitle'>Per 100,000</h5>");
 
 			for (var i = 0; i <= classes.length-1; i++)
 			{
@@ -177,8 +204,24 @@ window.onload = function ()
 		};
 		legend.addTo(map);
 	}
+
+
+	function createSearchUI(data)
+	{
+		var searchControl = new L.Control.Search({layer: cities2, propertyName: 'name', circleLocation: true});
+		searchControl.on('search_locationfound', function(e) 
+		{
+			//e.layer.setStyle({fillColor: '#3f0', color: '#0f0'});
+			if(e.layer._popup)
+				e.layer.openPopup();
+
+		});
+		return searchControl;
+	}
+
 	function createSliderUI(timestamps) 
 	{
+		console.log(timestamps);
 		var sliderControl = L.control({ position: 'bottomleft'} );
 		sliderControl.onAdd = function(map) 
 		{
@@ -210,9 +253,10 @@ window.onload = function ()
 
 		temporalLegend.onAdd = function(map) 
 		{
-			var output = L.DomUtil.create("output", "temporal-legend");
+			var output = L.DomUtil.create("div", "temporal-legend");
 			return output;
 		}
 		temporalLegend.addTo(map);
+		$(".temporal-legend").text(startTimestamp);
 	}
 }

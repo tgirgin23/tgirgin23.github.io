@@ -1,0 +1,32 @@
+.countries
+{
+	fille: #fff;
+	stroke: #ccc;
+	stroke-width: 2px;
+}
+
+.gratBackground
+{
+	fill: #D5E3FF;
+}
+
+.gratLines
+{
+	fill: none;
+	stroke: #999;
+	stroke-width: 1px;
+}
+
+.chart
+{
+	background-color: rgba(128, 128, 128, .2);
+	border: medium solid #999;
+	margin-left: 600px;
+	margin-top: 56px;
+}
+
+.chartTitle
+{
+	font-size: 1.5em;
+	font-weight: bold;
+}

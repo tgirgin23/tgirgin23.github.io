@@ -1,10 +1,12 @@
 .countries
 {
-	fille: #fff;
-	stroke: #ccc;
-	stroke-width: 2px;
+	fill: rgb(204, 204, 204);
 }
 
+.countriesEurope
+{
+	box-shadow: inner 0 0 5px #888;
+}
 .gratBackground
 {
 	fill: #D5E3FF;
@@ -17,12 +19,26 @@
 	stroke-width: 1px;
 }
 
+.map
+{
+	border: medium solid #999;
+	float: left;
+	position: relative;
+}
 .chart
 {
 	background-color: rgba(128, 128, 128, .2);
 	border: medium solid #999;
-	margin-left: 600px;
-	margin-top: 56px;
+	margin-left: 50px;
+	margin-top: 150px;
+	position: absolute;
+}
+.dropdown
+{
+	position: absolute;
+	margin-bottom: -20px;
+    margin-left: 755px;
+    float: left;
 }
 
 .chartTitle
@@ -30,3 +46,10 @@
 	font-size: 1.5em;
 	font-weight: bold;
 }
+/*
+ Color for "other countries" == #878787
+ #Example_K {
+ -moz-box-shadow: inset 0 0 5px #888;
+ -webkit-box-shadow: inset 0 0 5px#888;
+ box-shadow: inner 0 0 5px #888;
+ }*/

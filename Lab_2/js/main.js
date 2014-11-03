@@ -1,8 +1,8 @@
 // Global variables
-var keyArray = ["No Languages", "1 Language", "2 Languages", "3 Languages or more", "Percent of foreigner"];
+var keyArray = ["No languages", "1 language", "2 Languages", "3 Languages", "Percent of foreigner"];
 var expressed = keyArray[0];
 var chartWidth = 550, chartHeight = 450;
-var colorize, map;
+var colorize;
 
 // Being script when window loads
 window.onload = initialize();
@@ -21,11 +21,10 @@ function setMap()
 	var height = 700;
 
 	// Create a new svg element with the above dimensions
-	map = d3.select("body")
+	var map = d3.select("body")
 		.append("svg")
 		.attr("width", width)
-		.attr("height", height)
-		.attr("class", "map");
+		.attr("height", height);
 
 	// Create Europe Albers equal area conic projection, centered on Europe
 	var projection = d3.geo.conicConformal()
@@ -97,11 +96,11 @@ function setMap()
 		};
 
 		// Add Europe countries geometry to map
-		var countries = map.append("path") // Create SVG path element
-			.datum(topojson.feature(europe,
-									europe.objects.europe))
-			.attr("class", "countriesEurope") // Class name for styling
-			.attr("d", path); // Project data as geometry in SVG
+		// var countries = map.append("path") // Create SVG path element
+		// 	.datum(topojson.feature(europe,
+		// 							europe.objects.europe)) //ne_50m_admin_0_countries
+		// 	.attr("class", "countries") // Class name for styling
+		// 	.attr("d", path); // Project data as geometry in SVG
 
 		// Add countries to map as enumeration units colored by data
 		var diffCountries = map.selectAll(".countriesEurope")
@@ -113,7 +112,6 @@ function setMap()
 			.append("path")
 			.attr("class", function(d) { return d.properties.adm0_a3 })
 			.attr("d", path) 
-			//.style({'stroke' : 'black'})
 			.style("fill", function(d)
 			{
 				return choropleth(d, colorize);
@@ -170,7 +168,7 @@ function colorScale(csvData)
 				"#DAE8F5",
 				"#C6DBEF",
 				"#9EC2E4",
-				"#06306B"
+				"#8AB5DE"
 		]);
 
 	// Set min and max data values as domain
@@ -194,11 +192,7 @@ function choropleth(d, colorize)
 	} 
 	else
 	{
-		map.selectAll(".countriesEurope")
-				.style({'stroke' : 'black'})
-				.style({'fill' : 'grey'});
-
-		return;
+		return "#CCC";
 	};
 };
 
@@ -234,11 +228,7 @@ function createDropdown(csvData)
 			.append("div")
 			.attr("class", "dropdown")
 			.html("<h3>Select variable:</h3>")
-			.append("select")
-			.on("change", function() {
-				console.log(this.value);
-				changeAttribute(this.value, csvData)
-			});
+			.append("select");
 
 	// Create each option element within the dropdown
 	dropdown.selectAll("options")
@@ -247,20 +237,22 @@ function createDropdown(csvData)
 			.append("option")
 			.attr("value", function(d) { return d })
 			.text(function(d) {
-				console.log(d);
+				d = d[0].toUpperCase() +
+					d.substring(1, 3) + " " +
+					d.substring(3);
 				return d
 			});
 };
 
 function changeAttribute(attribute, csvData)
 {
-	// Change the expressed attribute to the one selected in the dropdown
+	// Change the expressed attribute
 	expressed = attribute;
 	colorize = colorScale(csvData);
 
 	// Recolor the map
-	// Select every country
-	d3.selectAll(".countriesEurope") 
+	// Select every province
+	d3.selectAll(".provinces") 
 		.select("path")
 		// Color enumeration units
 		.style("fill", function(d) { 
@@ -316,5 +308,3 @@ function dehighlight(data)
 	
 	d3.select("#" + props.adm0_a3 + "label").remove();
 };
-
-

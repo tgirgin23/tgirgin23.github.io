@@ -1,7 +1,7 @@
 // Global variables
 var keyArray = ["No_Languages", "One_Language", "Two_Languages", "Three_Languages_or_more", "Percent_of_foreigner"];
 var expressed = keyArray[0];
-var chartWidth = 550, chartHeight = 450;
+var chartWidth = 550, chartHeight = 499;
 var colorize, map, value, path, diffCountries, countries, jsonCountries, csvCountries, currentCountry, dropdown;
 var attributeValue;
 var firstTime = true;
@@ -21,8 +21,8 @@ function initialize()
 function setMap()
 {
 	// Map frame dimensions
-	var width = 700;
-	var height = 700;
+	var width = 600;
+	var height = 600;
 
 	// Create a new svg element with the above dimensions
 	map = d3.select("body")
@@ -37,10 +37,10 @@ function setMap()
 
 	// Create Europe Albers equal area conic projection, centered on Europe
 	var projection = d3.geo.conicConformal()
-		.center([-11, 53])
+		.center([-12, 52.5])
 		.rotate([-22, 0])
 		.parallels([43, 62])
-		.scale(1090)
+		.scale(940)
 		.translate([width / 2, height / 2])
 
 
@@ -250,7 +250,6 @@ function setMap()
 							changeAttribute("No_Languages", csvData, europe);
 					}
 				});
-		legend(csvData);
 		createDropdown(csvData, europe);
 		setChart(csvData, colorize);
 	};
@@ -337,11 +336,11 @@ function colorScale(csvData)
 	// The colors will range from the first one to the last one
 	var color = d3.scale.quantile()
 		.range([
-				"#d8e9f3",
-				"#b1d5e7",
-				"#8bbfdb",
-				"#64aacf",
-				"#6baed6"
+				"#6baed6",
+				"#4292c6",
+				"#2171a5",
+				"#08519c",
+				"#08519c"
 		]);
 	// Set min and max data values as domain
 	color.domain([
@@ -375,7 +374,7 @@ function choropleth(d, colorize)
 };
 
 /**
- * [updateChart description]
+ * Updates the chart according to the currently expressed attribute
  * @param  {[type]} bars
  * @param  {[type]} numBars
  * @return {[type]}
@@ -383,7 +382,6 @@ function choropleth(d, colorize)
 function updateChart(bars, numBars)
 {
 	//console.log("updateChart");
-	// the bars according to currently expressed attribute
 	bars.attr("height", function(d, i)
 		{
 			return Number(d[expressed]) * 3;
@@ -401,13 +399,22 @@ function updateChart(bars, numBars)
 			return choropleth(d, colorize);
 		});
 
+		console.log(expressed);
 	// Update chart title
+	if(expressed != "Percent_of_foreigner")
+	{
 	d3.select(".chartTitle")
-		.text("Number of known languages in Europe");
+		.text("Percentages of people that know " + names(expressed).toLowerCase());
+	}
+	else
+	{
+		d3.select(".chartTitle")
+			.text("Percentages of foreigners");
+	}
 };
 
 /**
- * [createDropdown description]
+ * Creating a dropdown menu with attributes from the CSV file
  * @param  {[type]} csvData
  * @return {[type]}
  */
@@ -419,6 +426,8 @@ function createDropdown(csvData, europe)
 			.append("div")
 			.attr("class", "dropdown")
 			.html("<h3>Select variable:</h3>")
+			.append("div")
+			.attr("class", "selector")
 			.append("select")
 			.on("change", function() {
 				attributeValue = this.value;
@@ -438,7 +447,7 @@ function createDropdown(csvData, europe)
 };
 
 /**
- * [changeAttribute description]
+ * Updating the webpage if an attribute is selected from the dropdown menu
  * @param  {[type]} attribute
  * @param  {[type]} csvData
  * @return {[type]}
@@ -509,20 +518,20 @@ function changeAttribute(attribute, csvData, europe)
 									 	*/
 										if(check == "FRA")
 										{
-											x2 = 56.01966;
-											y2 = 460.33119;
+											x2 = 55.01966;
+											y2 = 395.33119;
 											thisCountry = true;
 										}
 										if(check == "NOR")
 										{
-											x2 = 385.609856;
-											y2 = 130.790958;
+											x2 = 350.609856;
+											y2 = 100.790958;
 											thisCountry = true;
 										}
 										if(check == "GRC")
 										{
-											x2 = 485.2475;
-											y2 = 623.98259;
+											x2 = 425.2475;
+											y2 = 525.98259;
 											thisCountry = true;										
 										}
 									}
@@ -536,22 +545,22 @@ function changeAttribute(attribute, csvData, europe)
 									 	*/
 										if(check == "FRA")
 										{
-											x2 = 65.01966;
-											y2 = 460.33119;
+											x2 = 67.01966;
+											y2 = 390.33119;
 											thisCountry = true;
 										}
 										if(check == "NOR")
 										{
 											// Original values
-											x2 = 407.609856;
+											x2 = 350.609856;
 											y2 = 85.790958;
 											thisCountry = true;
 										}
 										if(check == "GRC")
 										{
 
-											x2 = 483.2475;
-											y2 = 620.98259;
+											x2 = 430.2475;
+											y2 = 530.98259;
 											thisCountry = true;										
 										}
 									}
@@ -565,22 +574,22 @@ function changeAttribute(attribute, csvData, europe)
 									 	*/
 										if(check == "FRA")
 										{
-											x2 = 107.01966;
-											y2 = 460.33119;
+											x2 = 104.01966;
+											y2 = 385.33119;
 											thisCountry = true;
 										}
 										if(check == "NOR")
 										{
 											// Original values
-											x2 = 407.609856;
+											x2 = 350.609856;
 											y2 = 85.790958;
 											thisCountry = true;
 										}
 										if(check == "GRC")
 										{
 
-											x2 = 470.2475;
-											y2 = 623.98259;
+											x2 = 415.2475;
+											y2 = 520.98259;
 											thisCountry = true;										
 										}
 									}
@@ -594,22 +603,22 @@ function changeAttribute(attribute, csvData, europe)
 									 	*/
 										if(check == "FRA")
 										{
-											x2 = 170.01966;
-											y2 = 450.33119;
+											x2 = 155.01966;
+											y2 = 375.33119;
 											thisCountry = true;
 										}
 										if(check == "NOR")
 										{
 											// Original values
-											x2 = 407.609856;
-											y2 = 85.790958;
+											x2 = 355.609856;
+											y2 = 70.790958;
 											thisCountry = true;
 										}
 										if(check == "GRC")
 										{
 
-											x2 = 473.2475;
-											y2 = 620.98259;
+											x2 = 420.2475;
+											y2 = 520.98259;
 											thisCountry = true;										
 										}
 									}
@@ -623,22 +632,22 @@ function changeAttribute(attribute, csvData, europe)
 									 	*/
 										if(check == "FRA")
 										{
-											x2 = 160.01966;
-											y2 = 450.33119;
+											x2 = 150.01966;
+											y2 = 378.33119;
 											thisCountry = true;
 										}
 										if(check == "NOR")
 										{
 											// Original values
-											x2 = 407.609856;
+											x2 = 360.609856;
 											y2 = 85.790958;
 											thisCountry = true;
 										}
 										if(check == "GRC")
 										{
 
-											x2 = 473.2475;
-											y2 = 623.98259;
+											x2 = 419.2475;
+											y2 = 525.98259;
 											thisCountry = true;										
 										}
 									}
@@ -714,7 +723,6 @@ function changeAttribute(attribute, csvData, europe)
 		.delay(function(d, i){
 			return i * 10 
 		});
-	legend(csvData);
 	//update bars according to current attribute
 	updateChart(bars, csvData.length);
 	//updateLegend(expressed, csvData);
@@ -785,8 +793,6 @@ function dehighlight(data)
 
 function moveLabel()
 {
-	// var x = d3.event.pageX < window.innerWidth - 245 ? d3.event.clientX + 3 : d3.event.clientX - 200;
-	// var y = d3.event.pageY < window.innerHeight - 100 ? d3.event.clientY - 45 : d3.event.clientY - 175;
 	var x = (d3.event.pageX + 3);
 	var y = (d3.event.pageY - 45);
 	d3.select(".infoLabel")
@@ -797,96 +803,25 @@ function moveLabel()
 		.style("opacity", 0.9);
 }
 
-function legend(csvData)
-{
-	var colors = ["#EEF4FA",
-				 "#DAE8F5",
-				 "#C6DBEF",
-				 "#9EC2E4",
-				 "#8AB5DE"];
-
-	var legendWidth = 40;
-	var legendHeight = 20;
-
-	// var chart = d3.select("body")
-	// 		.append("svg")
-	// 		.attr("width", chartWidth)
-	// 		.attr("height", chartHeight)
-	// 		.attr("class", "chart");
-
-	// // Create a text element for the chart title
-	// var chartTitle = chart.append("text")
-	// 		.attr("x", 20)
-	// 		.attr("y", 40)
-	// 		.attr("class", "chartTitle");
-	
-	// for(var key in keyArray)
-	// {
-		//var attr = keyArray[key];
-		//console.log(attr);
-		//
-		// var legend = d3.select("body")
-		// 	.append("svg")
-		// 	.attr("class", "map_legend")
-		// 	.data(keyArray)
-		// 	.enter();
-
-	// map = d3.select("body")
-	// 	.append("svg")
-	// 	.attr("width", width)
-	// 	.attr("height", height)
-	// 	.attr("class", "map");
-
-		var legend = d3.select("#mapLegend")
-				.append("svg")
-				.attr("width", legendWidth)
-				.attr("height", legendHeight)
-				.attr("class", "legend");
-
-		var title = legend.append("text")
-				.attr("x")
-
-		legend.append("rect")
-			.attr("width", legendWidth)
-			.attr("height", legendHeight)
-			.style("fill", function(keyArray, i)
-			{
-				console.log(colors[i])
-				return colors[i];
-			});
-	// }
-	// var legend = map.select("#legend")
-	// 		.append("svg")
-	// 		.attr("width", legendWidth)
-	// 		.attr("height", legendHeight)
-	// 		.attr("class", "legendDiv")
-	// 		.style("margin-top", 540); // CHANGE CHANGE CHANGE CHANGE CHANGE
-
-	// var items = legendDiv.selectAll(".items")
-
-	// items.
-	
-}
-
 //var keyArray = ["No_Languages", "One_Language", "Two_Languages", "Three_Languages_or_more", "Percent_of_foreigner"];
 function names(attribute)
 {
 	var trueAttribute;
 	if(attribute == "No_Languages")
 	{
-		trueAttribute = "No Languages";
+		trueAttribute = "One language";
 	}
 	else if(attribute == "One_Language")
 	{
-		trueAttribute = "One language"
+		trueAttribute = "Two languages"
 	}
 	else if(attribute == "Two_Languages")
 	{
-		trueAttribute = "Two languages"
+		trueAttribute = "Three languages"
 	}
 	else if(attribute == "Three_Languages_or_more")
 	{
-		trueAttribute = "Three languages or more"
+		trueAttribute = "Four languages or more"
 	}
 	else if(attribute == "Percent_of_foreigner")
 	{

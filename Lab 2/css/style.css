@@ -22,6 +22,7 @@ svg
 
 .map
 {
+	margin-left: 7%;
 	border: medium solid #999;
 	float: left;
 	position: relative;
@@ -31,20 +32,13 @@ svg
 	background-color: #e8e8ee;
 	border: medium solid #999;
 	margin-left: 50px;
-	margin-top: 150px;
+	margin-top: 100px;
 	position: absolute;
-}
-.dropdown
-{
-	position: absolute;
-	margin-bottom: -20px;
-    margin-left: 755px;
-    float: left;
 }
 
 .chartTitle
 {
-	font-size: 1.5em;
+	font-size: 1.2em;
 	font-weight: bold;
 }
 
@@ -63,7 +57,45 @@ svg
 	padding: 4px;
 }
 
-.map_legend
+#Interface
 {
 	position: absolute;
+	margin-top: -1.2%;
+	margin-left: 52.5%;
+}
+
+#Interface h3
+{
+	position: absolute;
+	float: left;
+}
+
+#mapType
+{
+	position: relative;
+	display: inline-block;
+	margin-left: 100px;
+	margin-top: 20px;
+	float: left;
+}
+
+.dropdown
+{
+    margin-left: 53%;
+    margin-top: -40%;
+    position: relative;
+    float: left;
+}
+
+.selector
+{
+	position: relative;
+	margin-left: 135px;
+	margin-top: -39px;
+	float: left;
+}
+
+body h1
+{
+	text-align: center;
 }

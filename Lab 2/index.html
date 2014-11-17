@@ -11,11 +11,15 @@
 </head>
 
 <body>
-	<div id="mapType">
-	  <input name = "mode" type= "radio" value = "choropleth" id = "choropleth" checked><label for = "choropleth"> Choropleth Map</label>
-	  <input name = "mode" type = "radio" value= "cartogram" id = "cartogram"><label for = "cartogram"> Cartogram Map</label>
+	<h1>How many languages do people in Europe speak?</h1>
+	<div id="Interface">
+		<h3>Map style: </h3>
+		<div id="mapType">
+			<input name = "mode" type= "radio" value = "choropleth" id = "choropleth" checked><label for = "choropleth"> Choropleth Map</label>
+			<input name = "mode" type = "radio" value= "cartogram" id = "cartogram"><label for = "cartogram"> Cartogram Map</label>
+		</div>
 	</div>
-	<div id = "mapLegend"></div>
+	
 	<!-- Librairies -->
 	<script src="lib/d3.js"></script>
 	<script src="lib/topojson.js"></script>
